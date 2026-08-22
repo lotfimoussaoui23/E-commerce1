@@ -824,7 +824,6 @@ app.post("/api/commandes/:id/valider", async (req, res) => {
 // Démarrer le serveur
 // ==========================
 
-
 app.listen(3000, () => {
 
 
@@ -833,4 +832,12 @@ app.listen(3000, () => {
     );
 
 
+});
+
+// Modifier le port dans server.js pour Rener
+//============================================
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Serveur démarré sur le port ${PORT}`);
 });
