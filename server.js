@@ -1,11 +1,5 @@
 const express = require("express");
 const mysql = require("mysql2");
-const pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "ecommerce"
-});
 const cors = require("cors");
 
 const app = express();
@@ -13,25 +7,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Permet à Node.js de servir index.html, CSS, JS et images
+// Servir HTML, CSS, JS et images
 app.use(express.static(__dirname));
+
 // ==========================
 // Connexion à MySQL
 // ==========================
 
-const db = mysql.createConnection({
+const pool = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "",
     database: "ecommerce"
 });
 
-
 // ==========================
 // Vérifier la connexion
 // ==========================
 
-db.connect((err) => {
+pool.getConnection((err, connection) => {
 
     if (err) {
         console.error("Erreur de connexion MySQL :", err);
@@ -39,8 +33,9 @@ db.connect((err) => {
     }
 
     console.log("Connexion à MySQL réussie !");
-});
 
+    connection.release();
+});
 
 // ==========================
 // Récupérer les produits
