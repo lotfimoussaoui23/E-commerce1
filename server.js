@@ -15,12 +15,12 @@ app.use(express.static(__dirname));
 // ==========================
 
 const pool = mysql.createPool({
-    host: mysql-3649e600-lotfimoussaoui-b957.d.aivencloud.com || "localhost",
-    port: 20340 || 3306,
-    user: avnadmin || "root",
-    password: AVNS_a91A1ImBt6WQqDNlEVY || "",
-    database: defaultdb || "ecommerce",
-    ssl: REQUIRED === "true"
+    host: process.env.DB_HOST || "localhost",
+    port: process.env.DB_PORT || 3306,
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "ecommerce",
+    ssl: process.env.DB_SSL === "true"
         ? { rejectUnauthorized: false }
         : undefined
 });
