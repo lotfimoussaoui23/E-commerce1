@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Historique des ventes</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ========================================
+         HEADER
+    ========================================= -->
+
+    <header>
+
+        <h1>🛍️ TechShop</h1>
+
+        <nav>
+
+            <button class="adminButton" onclick="window.location.href='index.html'">
+                🛍️ Accueil
+            </button>
+
+            <button class="adminButton" onclick="window.location.href='admin.html'">
+                🧑‍💼 Admin
+            </button>
+
+            <button class="adminButton" onclick="window.location.href='historique.html'">
+                📊 Historique
+            </button>         
+            
+        </nav>
+
+    </header>
+
+
+
+    <!-- ========================================
+         CONTENU PRINCIPAL
+    ========================================= -->
+
+    <main class="historique-container">
+
+
+        <h2>
+            📊 Historique des ventes
+        </h2>
+
+
+
+        <!-- ====================================
+             FILTRE PAR DATE
+        ===================================== -->
+
+        <div class="filtre-periode">
+
+
+            <div>
+
+                <label for="dateDebut">
+                    Du :
+                </label>
+
+                <input
+                    type="date"
+                    id="dateDebut"
+                >
+
+            </div>
+
+
+
+            <div>
+
+                <label for="dateFin">
+                    Au :
+                </label>
+
+                <input
+                    type="date"
+                    id="dateFin"
+                >
+
+            </div>
+
+
+
+            <button id="btnRechercher">
+
+                🔎 Rechercher
+
+            </button>
+
+
+
+            <button id="btnToutes">
+
+                📋 Toutes les ventes
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- ====================================
+             GRAND TABLEAU BLANC
+        ===================================== -->
+
+        <div class="table-container">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Produit
+                        </th>
+
+                        <th>
+                            Quantité
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody id="tableauVentes">
+
+                    <tr>
+
+                        <td colspan="4">
+
+                            Chargement des ventes...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+
+        <!-- ====================================
+             TOTAL
+        ===================================== -->
+
+        <div
+            id="totalVentes"
+            class="total-ventes">
+
+            💰 TOTAL :
+
+            <strong>
+                0 DA
+            </strong>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- ========================================
+         JAVASCRIPT
+    ========================================= -->
+
+    <script src="historique.js"></script>
+
+
+</body>
+
+</html>

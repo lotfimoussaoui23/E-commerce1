@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Détails de la commande</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background: #f5f6f8;
+
+            font-family: Arial, sans-serif;
+
+            color: #222;
+        }
+
+
+        .page {
+
+            max-width: 1100px;
+
+            margin: 40px auto;
+
+            padding: 0 25px;
+        }
+
+
+        /* ==========================
+           EN-TÊTE
+        ========================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 28px;
+        }
+
+
+        .buttons {
+
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        button {
+
+            cursor: pointer;
+
+            padding: 11px 18px;
+
+            border: none;
+
+            font-size: 15px;
+
+            font-weight: bold;
+        }
+
+
+        .back-button {
+
+            background: #ddd;
+
+            color: #222;
+        }
+
+
+        .print-button {
+
+            background: #ed1c24;
+
+            color: white;
+        }
+
+
+        .print-button:hover {
+
+            background: #c9151c;
+        }
+
+
+        /* ==========================
+           BLOCS
+        ========================== */
+
+        .box {
+
+            background: white;
+
+            padding: 25px;
+
+            margin-bottom: 20px;
+
+            border-radius: 6px;
+
+            box-shadow:
+                0 2px 10px rgba(0,0,0,0.06);
+        }
+
+
+        .box h2 {
+
+            margin-top: 0;
+
+            margin-bottom: 20px;
+
+            font-size: 20px;
+
+            border-bottom: 1px solid #eee;
+
+            padding-bottom: 12px;
+        }
+
+
+        /* ==========================
+           INFORMATIONS CLIENT
+        ========================== */
+
+        .customer-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+        }
+
+
+        .info {
+
+            padding: 10px 0;
+        }
+
+
+        .info strong {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #666;
+
+            font-size: 13px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* ==========================
+           PRODUITS
+        ========================== */
+
+        .products-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        .products-table th {
+
+            background: #f1f1f1;
+
+            padding: 13px;
+
+            text-align: left;
+
+            font-size: 14px;
+        }
+
+
+        .products-table td {
+
+            padding: 13px;
+
+            border-bottom:
+                1px solid #eee;
+
+            vertical-align: middle;
+        }
+
+
+        .product {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .product img {
+
+            width: 60px;
+
+            height: 60px;
+
+            object-fit: contain;
+        }
+
+
+        .product-name {
+
+            font-weight: bold;
+        }
+
+
+        .number {
+
+            white-space: nowrap;
+        }
+
+
+        /* ==========================
+           TOTAL
+        ========================== */
+
+        .total-box {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            align-items: center;
+
+            gap: 30px;
+
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top: 2px solid #222;
+
+            font-size: 20px;
+        }
+
+
+        .total-box strong {
+
+            font-size: 26px;
+
+            color: #ed1c24;
+        }
+
+
+        /* ==========================
+           STATUT
+        ========================== */
+
+        .status {
+
+            display :inline;
+
+            padding: 8px 14px;
+
+            background: #f8f9fa;
+
+            font-weight: bold;
+
+            border-radius: 4px;
+        }
+
+        .validated-status {
+            display: flex;
+            margin-left: 10px;
+            padding: 8px 14px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        /* ==========================
+        DATES DE LA COMMANDE
+        ========================== */
+
+        .commande-dates {
+
+            display: grid;
+
+            grid-template-columns: 0.8fr 1fr 1fr;
+
+            gap: 20px;
+
+            margin-top: 20px;
+        }
+
+
+        .date-box {
+
+            padding: 15px;
+
+            background: #f8f9fa;
+
+            border: 1px solid #eee;
+
+            border-radius: 6px;
+        }
+
+
+        .date-box span {
+
+            display: block;
+
+            color: #666;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .date-box strong {
+
+            display: block;
+
+            font-size: 16px;
+
+            color: #222;
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .commande-dates {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        .loading {
+
+            text-align: center;
+
+            padding: 50px;
+
+            font-size: 18px;
+
+            color: #777;
+        }
+
+
+        /* ==========================
+           IMPRESSION
+        ========================== */
+
+        @media print {
+
+            body {
+
+                background: white;
+            }
+
+
+            .page {
+
+                max-width: none;
+
+                margin: 0;
+
+                padding: 0;
+            }
+
+
+            .buttons {
+
+                display: none;
+            }
+
+
+            .box {
+
+                box-shadow: none;
+
+                border: none;
+
+                padding: 10px 0;
+            }
+
+
+            .header {
+
+                margin-bottom: 15px;
+            }
+
+
+            .header h1 {
+
+                font-size: 22px;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .customer-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- ==========================
+         HEADER
+    ========================== -->
+
+    <div class="header">
+
+        <h1 id="pageTitle">
+            Commande
+        </h1>
+
+
+        <div class="buttons">
+
+            <button
+                class="back-button"
+                onclick="history.back()">
+
+                ← Retour
+
+            </button>
+
+
+            <button
+                class="print-button"
+                onclick="window.print()">
+
+                🖨 Imprimer
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================
+         INFORMATIONS CLIENT
+    ========================== -->
+
+    <div class="box">
+
+        <h2>
+            Informations du client
+        </h2>
+
+
+        <div
+            id="customerInfo"
+            class="customer-grid">
+
+            <div class="loading">
+                Chargement...
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================
+         PRODUITS
+    ========================== -->
+
+    <div class="box">
+
+        <h2>
+            Produits commandés
+        </h2>
+
+
+        <table class="products-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Produit
+                    </th>
+
+                    <th>
+                        Prix unitaire
+                    </th>
+
+                    <th>
+                        Quantité
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="productsList">
+
+            </tbody>
+
+        </table>
+
+
+        <div class="total-box">
+
+                 
+            <span>
+                TOTAL
+            </span>
+
+
+            <strong id="orderTotal">
+                0 DA
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================
+         STATUT
+    ========================== -->
+
+    <div class="box">
+
+        <h2>
+            Statut de la commande
+        </h2>
+
+
+        
+        
+        
+
+        <!-- DATES ICI -->
+        <div class="commande-dates">
+            
+                 
+                <strong id="orderStatus" class="status">
+                    -
+                </strong>
+                
+            
+            <div class="date-box">
+                <span>📅 Date de commande</span>
+                    <strong id="dateCommande">
+                        --
+                    </strong>
+            </div>
+            <div class="date-box">
+                <span>✅ Date de validation</span>
+                    <strong id="dateValidation">
+                    --
+                    </strong>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+// ========================================
+// RÉCUPÉRER L'ID DANS L'URL
+// ========================================
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const orderId =
+    params.get("id");
+
+
+// Vérification
+
+if (!orderId) {
+
+    alert(
+        "Numéro de commande manquant."
+    );
+
+    window.location.href =
+        "admin.html";
+}
+
+
+// ========================================
+// CHARGER LA COMMANDE
+// ========================================
+
+async function loadOrder() {
+
+    try {
+
+
+        // ==============================
+        // Récupérer toutes les commandes
+        // ==============================
+
+        const ordersResponse =
+            await fetch(
+                "/api/commandes"
+            );
+
+
+        if (!ordersResponse.ok) {
+
+            throw new Error(
+                "Impossible de récupérer les commandes"
+            );
+
+        }
+
+
+        const orders =
+            await ordersResponse.json();
+
+
+        const order =
+            orders.find(
+                item =>
+                    Number(item.id) ===
+                    Number(orderId)
+            );
+
+
+        if (!order) {
+
+            throw new Error(
+                "Commande introuvable"
+            );
+
+        }
+
+
+        // ==============================
+        // TITRE
+        // ==============================
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+            `Commande #${order.id}`;
+
+
+        // ==============================
+        // CLIENT
+        // ==============================
+
+        document.getElementById(
+            "customerInfo"
+        ).innerHTML = `
+
+            <div class="info">
+
+                <strong>Nom complet</strong>
+
+                ${order.prenom}
+                ${order.nom}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>Téléphone</strong>
+
+                ${order.telephone}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>Wilaya</strong>
+
+                ${order.wilaya}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>Ville</strong>
+
+                ${order.ville || "-"}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>Adresse</strong>
+
+                ${order.adresse}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>Email</strong>
+
+                ${order.email || "-"}
+
+            </div>
+
+        `;
+
+
+        // ==============================
+        // PRODUITS
+        // ==============================
+
+        const detailsResponse =
+            await fetch(
+                `/api/commandes/${orderId}/details`
+            );
+
+
+        if (!detailsResponse.ok) {
+
+            throw new Error(
+                "Impossible de récupérer les produits"
+            );
+
+        }
+
+
+        const products =
+            await detailsResponse.json();
+
+
+        const productsList =
+            document.getElementById(
+                "productsList"
+            );
+
+
+        productsList.innerHTML = "";
+
+
+        products.forEach(product => {
+
+
+            const prix =
+                Number(
+                    product.prix_unitaire
+                );
+
+
+            const quantite =
+                Number(
+                    product.quantite
+                );
+
+
+            const total =
+                prix * quantite;
+
+
+            productsList.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        <div class="product">
+
+                            <img
+                                src="${product.image}"
+                                alt="${product.nom}"
+                            >
+
+                            <span class="product-name">
+
+                                ${product.nom}
+
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <td class="number">
+
+                        ${prix.toLocaleString()}
+                        DA
+
+                    </td>
+
+
+                    <td>
+
+                        ${quantite}
+
+                    </td>
+
+
+                    <td class="number">
+
+                        ${total.toLocaleString()}
+                        DA
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        // ==============================
+        // TOTAL
+        // ==============================
+
+        document.getElementById(
+            "orderTotal"
+        ).textContent =
+
+            Number(order.total)
+                .toLocaleString() +
+            " DA";
+
+
+        // ==============================
+        // STATUT
+        // ==============================
+
+        let statutHTML = `
+            <span class="status">
+                ${order.statut}
+            </span>
+`       ;
+
+        if (
+            order.statut === "Livrée" &&
+            Number(order.stock_deduit) === 1
+        ) {
+            statutHTML += `
+                <span class="validated-status">
+                    ✓ Validée
+                </span>
+    `       ;
+        }
+
+        document.getElementById(
+            "orderStatus"
+        ).innerHTML = statutHTML;
+        
+        // ==============================
+        // DATES DE LA COMMANDE
+        // ==============================
+
+        document.getElementById(
+            "dateCommande"
+        ).textContent =
+            order.date_commande
+                ? new Date(order.date_commande).toLocaleString("fr-FR")
+                : "--";
+
+
+        document.getElementById(
+            "dateValidation"
+        ).textContent =
+            order.date_validation
+                ? new Date(order.date_validation).toLocaleString("fr-FR")
+                : "--";
+        
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "customerInfo"
+        ).innerHTML = `
+
+            <div class="loading">
+
+                Erreur lors du chargement
+                de la commande.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+// ========================================
+// LANCER
+// ========================================
+
+loadOrder();
+
+</script>
+
+
+</body>
+
+</html>

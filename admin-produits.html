@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Administration - Produits</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6f8;
+            color: #222;
+        }
+
+        .admin-top {
+            width: 100%;
+            padding-top: 25px;
+            color: #713d3d;
+            
+        }
+
+        header {
+            background: #f53f3f;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+}
+        
+        .admin-title {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            padding: 0 30px;
+            font-size: 28px;
+        }
+
+        .indexButton {
+            background: transparent;
+            border: none;
+            padding: 0 60px;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .indexButton:hover {
+            color: #88e850;
+        }
+
+        .admin-menu {
+            display: flex;
+            gap: 10px;
+            max-width: 1400px;
+            margin: 0 auto 25px;
+            padding: 0 30px 10px;
+            border-bottom: 2px solid #f10707;
+        }
+
+        .admin-menu a {
+            text-decoration: none;
+            color: #333;
+            background: #f1f1f1;
+            padding: 11px 20px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .admin-menu a:hover {
+            background: #ddd;
+        }
+
+        .admin-menu a.active {
+            background: #ed1c24;
+            color: white;
+        }
+
+        .admin-menu i {
+            color: #f5b400;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 35px auto;
+            padding: 0 30px;
+        }
+
+        /* HEADER */
+        .admin-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            margin: 55px 38px 35px;
+        }
+
+        .admin-section-text h2 {
+            margin: 0 0 10px;
+
+            font-size: 30px;
+            line-height: 1.1;
+            font-weight: 700;
+
+            color: #17212b;
+        }
+
+        .admin-section-text p {
+            margin: 0;
+
+            font-size: 16px;
+            line-height: 1.3;
+
+            color: #8e6262;
+        }
+
+        .admin-action-btn {
+            border: none;
+
+            background: #ed1c24;
+            color: white;
+
+            padding: 17px 28px;
+
+            font-size: 16px;
+            line-height: 1.2;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 2px;
+        }
+
+        .admin-action-btn:hover {
+            background: #c9151c;
+        }
+            
+         /* TABLE */
+
+        .products-box {
+            background: white;
+            border-radius: 8px;
+            overflow-x: auto;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        th {
+            background: #17212b;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        /* IMAGE */
+
+        .product-image {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+        }
+
+        /* PRIX */
+
+        .price {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* STOCK */
+
+        .stock {
+            font-weight: bold;
+        }
+
+        /* ACTIONS */
+
+        .edit-button,
+        .delete-button {
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .edit-button {
+            background: #eee;
+        }
+
+        .edit-button:hover {
+            background: #ddd;
+        }
+
+        .delete-button {
+            background: #ed1c24;
+            color: white;
+            margin-left: 5px;
+        }
+
+        .delete-button:hover {
+            background: #c9151c;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 95%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        /* FORMULAIRE */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        .form-group textarea {
+            height: 90px;
+            resize: vertical;
+        }
+
+        .products-summary {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            margin: 25px 38px 40px;
+        }
+
+        .summary-box {
+            min-width: 220px;
+            padding: 18px 25px;
+            background: white;
+            border-left: 4px solid #ed1c24;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .summary-box span {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .summary-box strong {
+            font-size: 24px;
+            color: #17212b;
+        }
+
+        /* PREVIEW */
+
+        .image-preview {
+            display: none;
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+
+        /* BOUTONS */
+
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .cancel-button,
+        .save-button {
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cancel-button {
+            background: #ddd;
+        }
+
+        .save-button {
+            background: #ed1c24;
+            color: white;
+        }
+
+        .save-button:hover {
+            background: #c9151c;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<header>
+    <h1>🛍️ TechShop </h1>
+
+        <nav>
+            <button class="adminButton" onclick="window.location.href='index.html'">
+                🛍️ Accueil
+            </button>
+
+            <button class="adminButton" onclick="window.location.href='admin.html'">
+                🧑‍💼 Admin
+            </button>
+
+            <button class="adminButton" onclick="window.location.href='historique.html'">
+                📊 Historique
+            </button>         
+    
+        </nav>
+  
+</header>
+
+<body>
+
+<div class="admin-top">
+
+    <h1 class="admin-title">
+        🧑‍💼 Administration de la boutique🔐 
+    </h1>
+
+    <nav class="admin-menu">
+
+        <a href="admin.html">
+            🧺 Commandes
+        </a>
+
+        <a href="admin-produits.html" class="active">
+            📦 Produits
+        </a>
+
+    </nav>
+
+</div>
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="admin-section-header">
+
+        <div class="admin-section-text">
+            <h2>Gestion des produits</h2>
+            <p>Ajouter, modifier ou supprimer les produits de la boutique.</p>
+        </div>
+
+        <button class="admin-action-btn" onclick="openAddProduct()">
+            + Ajouter un produit
+        </button>
+
+    </div>
+                
+            
+    
+    <!-- TABLE PRODUITS -->
+
+    <div class="products-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>IMAGE</th>
+
+                    <th>PRODUIT</th>
+
+                    <th>DESCRIPTION</th>
+
+                    <th>PRIX</th>
+
+                    <th>STOCK</th>
+
+                    <th>ACTIONS</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="productsTable">
+
+            </tbody>
+
+        </table>
+
+        <div class="products-summary">
+
+            <div class="summary-box">
+                <span>Total produits</span>
+                <strong id="totalProducts">0</strong>
+            </div>
+
+            <div class="summary-box">
+                <span>Total du stock</span>
+                <strong id="totalStock">0</strong>
+            </div>
+
+            <div class="summary-box">
+                <span>Valeur du stock</span>
+                <strong id="totalStockValue">0 DA</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- MODAL -->
+
+<div
+    id="productModal"
+    class="modal">
+
+
+    <div class="modal-content">
+
+
+        <h2 id="modalTitle">
+            Ajouter un produit
+        </h2>
+
+
+        <input
+            type="hidden"
+            id="productId">
+
+
+        <div class="form-group">
+
+            <label>
+                Nom du produit
+            </label>
+
+            <input
+                type="text"
+                id="productName"
+                placeholder="Ex : Clavier">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Description
+            </label>
+
+            <textarea
+                id="productDescription"
+                placeholder="Description du produit">
+            </textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Prix (DA)
+            </label>
+
+            <input
+                type="number"
+                id="productPrice"
+                min="0">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Image
+            </label>
+
+            <input
+                type="text"
+                id="productImage"
+                placeholder="images/produit.png"
+                oninput="previewImage()">
+
+
+            <img
+                id="imagePreview"
+                class="image-preview">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Stock
+            </label>
+
+            <input
+                type="number"
+                id="productStock"
+                min="0">
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button
+                class="cancel-button"
+                onclick="closeProductModal()">
+
+                Annuler
+
+            </button>
+
+
+            <button
+                class="save-button"
+                onclick="saveProduct()">
+
+                Enregistrer
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+let products = [];
+
+
+// ========================================
+// CHARGER LES PRODUITS
+// ========================================
+
+async function loadProducts() {
+
+    try {
+
+        const response =
+            await fetch("/api/produits");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Erreur serveur"
+            );
+
+        }
+
+
+        products =
+            await response.json();
+
+
+        displayProducts();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Impossible de récupérer les produits."
+        );
+
+    }
+
+}
+
+
+
+// ========================================
+// AFFICHER LES PRODUITS
+// ========================================
+
+function displayProducts() {
+
+    const table =
+        document.getElementById(
+            "productsTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    products.forEach(product => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${product.id}
+                </td>
+
+
+                <td>
+
+                    <img
+                        src="${product.image}"
+                        class="product-image"
+                        onerror="
+                            this.style.display='none'
+                        ">
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        ${product.nom}
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+                    ${product.description || ""}
+
+                </td>
+
+
+                <td class="price">
+
+                    ${Number(product.prix)
+                        .toLocaleString()}
+                    DA
+
+                </td>
+
+
+                <td class="stock">
+
+                    ${product.stock ?? 0}
+
+                </td>
+
+
+                <td>
+
+                    <button
+                        class="edit-button"
+                        onclick="
+                            editProduct(${product.id})
+                        ">
+
+                        ✏️ Modifier
+
+                    </button>
+
+
+                    <button
+                        class="delete-button"
+                        onclick="
+                            deleteProduct(${product.id})
+                        ">
+
+                        🗑️ Supprimer
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+    const totalProducts = products.length;
+
+    const totalStock = products.reduce(
+        (total, product) => {
+            return total + (Number(product.stock) || 0);
+        },
+        0
+    );
+
+    const totalStockValue = products.reduce(
+        (total, product) => {
+            const prix = Number(product.prix) || 0;
+            const stock = Number(product.stock) || 0;
+
+            return total + (prix * stock);
+        },
+        0
+    );
+
+    document.getElementById("totalProducts").textContent =
+        totalProducts;
+
+    document.getElementById("totalStock").textContent =
+        totalStock;
+
+    document.getElementById("totalStockValue").textContent =
+        totalStockValue.toLocaleString("fr-FR") + " DA";
+
+}
+
+
+
+// ========================================
+// AJOUTER
+// ========================================
+
+function openAddProduct() {
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Ajouter un produit";
+
+
+    document.getElementById(
+        "productId"
+    ).value = "";
+
+
+    document.getElementById(
+        "productName"
+    ).value = "";
+
+
+    document.getElementById(
+        "productDescription"
+    ).value = "";
+
+
+    document.getElementById(
+        "productPrice"
+    ).value = "";
+
+
+    document.getElementById(
+        "productImage"
+    ).value = "";
+
+
+    document.getElementById(
+        "productStock"
+    ).value = "";
+
+
+    document.getElementById(
+        "imagePreview"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "productModal"
+    ).style.display = "flex";
+
+}
+
+
+
+// ========================================
+// MODIFIER
+// ========================================
+
+function editProduct(id) {
+
+    const product =
+        products.find(
+            p => Number(p.id) === Number(id)
+        );
+
+
+    if (!product) {
+
+        alert("Produit introuvable.");
+
+        return;
+    }
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Modifier le produit";
+
+
+    document.getElementById(
+        "productId"
+    ).value =
+        product.id;
+
+
+    document.getElementById(
+        "productName"
+    ).value =
+        product.nom || "";
+
+
+    document.getElementById(
+        "productDescription"
+    ).value =
+        product.description || "";
+
+
+    document.getElementById(
+        "productPrice"
+    ).value =
+        product.prix || 0;
+
+
+    document.getElementById(
+        "productImage"
+    ).value =
+        product.image || "";
+
+
+    document.getElementById(
+        "productStock"
+    ).value =
+        product.stock || 0;
+
+
+    previewImage();
+
+
+    document.getElementById(
+        "productModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+
+// ========================================
+// APERÇU IMAGE
+// ========================================
+
+function previewImage() {
+
+    const image =
+        document.getElementById(
+            "imagePreview"
+        );
+
+
+    const url =
+        document.getElementById(
+            "productImage"
+        ).value.trim();
+
+
+    if (!url) {
+
+        image.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    image.src = url;
+
+    image.style.display =
+        "block";
+
+}
+
+
+
+// ========================================
+// ENREGISTRER
+// ========================================
+
+async function saveProduct() {
+
+    const id =
+        document.getElementById(
+            "productId"
+        ).value;
+
+
+    const product = {
+
+        nom:
+            document.getElementById(
+                "productName"
+            ).value.trim(),
+
+        description:
+            document.getElementById(
+                "productDescription"
+            ).value.trim(),
+
+        prix:
+            Number(
+                document.getElementById(
+                    "productPrice"
+                ).value
+            ),
+
+        image:
+            document.getElementById(
+                "productImage"
+            ).value.trim(),
+
+        stock:
+            Number(
+                document.getElementById(
+                    "productStock"
+                ).value
+            )
+
+    };
+
+
+    if (!product.nom) {
+
+        alert(
+            "Veuillez saisir le nom du produit."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Number.isFinite(product.prix) ||
+        product.prix < 0
+    ) {
+
+        alert(
+            "Veuillez saisir un prix valide."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Number.isFinite(product.stock) ||
+        product.stock < 0
+    ) {
+
+        alert(
+            "Veuillez saisir un stock valide."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        let response;
+
+
+        // MODIFIER
+
+        if (id) {
+
+            response =
+                await fetch(
+                    `/api/produits/${id}`,
+                    {
+
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(product)
+
+                    }
+                );
+
+        }
+
+
+        // AJOUTER
+
+        else {
+
+            response =
+                await fetch(
+                    "/api/produits",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(product)
+
+                    }
+                );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.error ||
+                result.message ||
+                "Erreur serveur"
+            );
+
+        }
+
+
+        closeProductModal();
+
+
+        await loadProducts();
+
+
+        alert(
+            id
+                ? "Produit modifié avec succès."
+                : "Produit ajouté avec succès."
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+// ========================================
+// SUPPRIMER
+// ========================================
+
+async function deleteProduct(id) {
+
+    const product =
+        products.find(
+            p => Number(p.id) === Number(id)
+        );
+
+
+    if (!product) return;
+
+
+    const confirmation =
+        confirm(
+            `Voulez-vous vraiment supprimer "${product.nom}" ?`
+        );
+
+
+    if (!confirmation) return;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/produits/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.error ||
+                result.message ||
+                "Erreur suppression"
+            );
+
+        }
+
+
+        await loadProducts();
+
+
+        alert(
+            "Produit supprimé avec succès."
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+// ========================================
+// FERMER LE FORMULAIRE
+// ========================================
+
+function closeProductModal() {
+
+    document.getElementById(
+        "productModal"
+    ).style.display =
+        "none";
+
+}
+
+
+
+// ========================================
+// FERMER EN CLIQUANT À L'EXTÉRIEUR
+// ========================================
+
+document.getElementById(
+    "productModal"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (event.target === this) {
+
+            closeProductModal();
+
+        }
+
+    }
+);
+
+
+
+// ========================================
+// DÉMARRAGE
+// ========================================
+
+loadProducts();
+
+
+</script>
+
+
+</body>
+
+</html>

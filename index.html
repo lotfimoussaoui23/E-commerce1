@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini E-commerce</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>🛍️ TechShop </h1>
+
+        <nav>
+            <button class="adminButton" onclick="window.location.href='index.html'">
+                🛍️ Accueil
+            </button>
+            <button class="adminButton" onclick="window.location.href='admin.html'">
+                🧑‍💼 Admin
+            </button>
+            <button class="adminButton" onclick="window.location.href='historique.html'">
+                📊 Historique
+            </button>
+            
+            <button
+                id="cartButton"
+                onclick="window.location.href='carte.html'">
+                    🛒 Panier
+                <span id="cartCount">0</span>
+            </button>
+    
+        </nav>
+            
+</header>
+
+<main>
+
+    <div class="search">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Rechercher un produit..."
+        >
+    </div>
+
+    <section id="products" class="products">
+        <!-- Produits générés par JavaScript -->
+    </section>
+
+</main>
+
+<!-- Fenêtre panier -->
+<div id="cartModal" class="modal">
+
+    <div class="cart">
+
+        <button id="closeCart" class="close">✕</button>
+
+        <h2>Mon panier</h2>
+
+        <div id="cartItems"></div>
+
+        <div class="total">
+            Total : <strong><span id="cartTotal">0</span> DA</strong>
+        </div>
+
+        <button id="checkout" class="checkout">
+            Commander
+        </button>
+
+    </div>
+
+</div>
+
+<div id="productDetails" class="productDetails"> </div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
