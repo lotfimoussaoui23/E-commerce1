@@ -4,6 +4,10 @@ const cors = require("cors");
 
 const app = express();
 
+const upload = multer({
+    storage: storage
+});
+
 const multer = require("multer");
 const path = require("path");
 
@@ -38,7 +42,13 @@ app.use(express.json());
 // Servir HTML, CSS, JS et images
 app.use(express.static(__dirname));
 
-app.use("/uploads", express.static("uploads"));
+// Permet d'accéder aux images uploadées
+app.use(
+    "/uploads",
+    express.static(
+        path.join(__dirname, "uploads")
+    )
+);
 
 // ==========================
 // Connexion à MySQL
