@@ -560,15 +560,15 @@
             </label>
 
             <input
-                type="text"
+                type="file"
                 id="productImage"
-                placeholder="images/produit.png"
-                oninput="previewImage()">
+                accept="image/*"
+                onchange="previewImage()">
 
-
-            <img
-                id="imagePreview"
-                class="image-preview">
+<img
+    id="imagePreview"
+    class="image-preview"
+    style="display: none;">
 
         </div>
 
