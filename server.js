@@ -154,7 +154,7 @@ app.put("/api/produits/:id", (req, res) => {
         WHERE id = ?
     `;
 
-    db.query(
+    pool.query(
         sql,
         [
             nom,
@@ -200,7 +200,7 @@ app.delete("/api/produits/:id", (req, res) => {
         WHERE id = ?
     `;
 
-    db.query(
+    pool.query(
         sql,
         [id],
         (err, result) => {
@@ -280,7 +280,7 @@ app.post("/api/commandes", (req, res) => {
     `;
 
 
-    db.query(
+    pool.query(
         sqlClient,
         [
             client.prenom,
@@ -332,7 +332,7 @@ app.post("/api/commandes", (req, res) => {
             `;
 
 
-            db.query(
+            pool.query(
                 sqlProduits,
                 ids,
                 (err, productsDB) => {
@@ -398,7 +398,7 @@ app.post("/api/commandes", (req, res) => {
                     `;
 
 
-                    db.query(
+                    pool.query(
                         sqlCommande,
                         [
                             clientId,
@@ -460,7 +460,7 @@ app.post("/api/commandes", (req, res) => {
                                 `;
 
 
-                                db.query(
+                                pool.query(
                                     sqlDetail,
                                     [
                                         commandeId,
@@ -552,7 +552,7 @@ app.get("/api/commandes", (req, res) => {
     `;
 
 
-    db.query(sql, (err, results) => {
+    pool.query(sql, (err, results) => {
 
         if (err) {
 
@@ -613,7 +613,7 @@ app.put("/api/commandes/:id/statut", (req, res) => {
     `;
 
 
-    db.query(
+    pool.query(
         sql,
         [statut, id],
         (err, result) => {
@@ -665,7 +665,7 @@ app.get("/api/commandes/:id/details", (req, res) => {
 
     `;
 
-    db.query(
+    pool.query(
         sql,
         [commandeId],
         (err, results) => {
