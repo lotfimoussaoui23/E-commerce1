@@ -179,65 +179,128 @@ app.post(
 );
 
 
-//===========================
-// modifier un produit
-//===========================
+// ==========================
+// MODIFIER UN PRODUIT
+// ==========================
 
-app.put("/api/produits/:id", (req, res) => {
+app.put(
+    "/api/produits/:id",
+    upload.single("image"),
+    (req, res) => {
 
-    const id = req.params.id;
+        const id = req.params.id;
 
-    const {
-        nom,
-        description,
-        prix,
-        image,
-        stock
-    } = req.body;
-
-    const sql = `
-        UPDATE produits
-        SET
-            nom = ?,
-            description = ?,
-            prix = ?,
-            image = ?,
-            stock = ?
-        WHERE id = ?
-    `;
-
-    pool.query(
-        sql,
-        [
+        const {
             nom,
-            description || "",
+            description,
             prix,
-            image || "",
-            stock || 0,
-            id
-        ],
-        (err, result) => {
+            stock
+        } = req.body;
 
-            if (err) {
 
-                console.error(
-                    "Erreur modification produit :",
-                    err
-                );
+        // Si une nouvelle image est envoyée
+        if (req.file) {
 
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
+            const image =
+                "/uploads/" +
+                req.file.filename;
 
-            res.json({
-                success: true
-            });
+
+            const sql = `
+                UPDATE produits
+                SET
+                    nom = ?,
+                    description = ?,
+                    prix = ?,
+                    image = ?,
+                    stock = ?
+                WHERE id = ?
+            `;
+
+
+            pool.query(
+                sql,
+                [
+                    nom,
+                    description || "",
+                    prix,
+                    image,
+                    stock || 0,
+                    id
+                ],
+                (err, result) => {
+
+                    if (err) {
+
+                        console.error(
+                            "Erreur modification produit :",
+                            err
+                        );
+
+                        return res.status(500).json({
+                            error: err.message
+                        });
+                    }
+
+
+                    res.json({
+                        success: true
+                    });
+
+                }
+            );
 
         }
-    );
 
-});
+        // Aucune nouvelle image
+        else {
+
+            const sql = `
+                UPDATE produits
+                SET
+                    nom = ?,
+                    description = ?,
+                    prix = ?,
+                    stock = ?
+                WHERE id = ?
+            `;
+
+
+            pool.query(
+                sql,
+                [
+                    nom,
+                    description || "",
+                    prix,
+                    stock || 0,
+                    id
+                ],
+                (err, result) => {
+
+                    if (err) {
+
+                        console.error(
+                            "Erreur modification produit :",
+                            err
+                        );
+
+                        return res.status(500).json({
+                            error: err.message
+                        });
+                    }
+
+
+                    res.json({
+                        success: true
+                    });
+
+                }
+            );
+
+        }
+
+    }
+);
 
 // ==========================
 // supprime un produit
