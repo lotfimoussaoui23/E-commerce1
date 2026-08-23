@@ -59,7 +59,7 @@ app.get("/api/produits", (req, res) => {
         ORDER BY id ASC
     `;
 
-    db.query(sql, (err, results) => {
+    pool.query(sql, (err, results) => {
 
         if (err) {
 
@@ -94,7 +94,7 @@ app.post("/api/produits", (req, res) => {
         VALUES (?, ?, ?, ?, ?)
     `;
 
-    db.query(
+    pool.query(
         sql,
         [
             nom,
