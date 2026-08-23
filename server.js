@@ -828,16 +828,6 @@ app.post("/api/commandes/:id/valider", async (req, res) => {
 // Démarrer le serveur
 // ==========================
 
-app.listen(3000, () => {
-
-
-    console.log(
-        "Serveur démarré sur http://localhost:3000"
-    );
-
-
-});
-
 // Modifier le port dans server.js pour Rener
 //============================================
 const PORT = process.env.PORT || 3000;
