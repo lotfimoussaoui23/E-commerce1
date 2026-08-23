@@ -862,67 +862,73 @@ function editProduct(id) {
             p => Number(p.id) === Number(id)
         );
 
-
     if (!product) {
 
         alert("Produit introuvable.");
-
         return;
     }
-
 
     document.getElementById(
         "modalTitle"
     ).textContent =
         "Modifier le produit";
 
-
     document.getElementById(
         "productId"
     ).value =
         product.id;
-
 
     document.getElementById(
         "productName"
     ).value =
         product.nom || "";
 
-
     document.getElementById(
         "productDescription"
     ).value =
         product.description || "";
-
 
     document.getElementById(
         "productPrice"
     ).value =
         product.prix || 0;
 
-
+    // On ne peut pas remplir automatiquement
+    // un champ type="file"
     document.getElementById(
         "productImage"
-    ).value =
-        product.image || "";
-
+    ).value = "";
 
     document.getElementById(
         "productStock"
     ).value =
         product.stock || 0;
 
+    // Afficher l'image actuelle
+    const preview =
+        document.getElementById(
+            "imagePreview"
+        );
 
-    previewImage();
+    if (product.image) {
 
+        preview.src =
+            product.image;
+
+        preview.style.display =
+            "block";
+
+    } else {
+
+        preview.style.display =
+            "none";
+    }
 
     document.getElementById(
         "productModal"
     ).style.display =
         "flex";
-
 }
-
 
 
 // ========================================
@@ -931,41 +937,30 @@ function editProduct(id) {
 
 function previewImage() {
 
-    const image =
-        document.getElementById(
-            "imagePreview"
-        );
+    const input =
+        document.getElementById("productImage");
 
+    const preview =
+        document.getElementById("imagePreview");
 
-    const url =
-        document.getElementById(
-            "productImage"
-        ).value.trim();
+    const file = input.files[0];
 
+    if (!file) {
 
-    if (!url) {
-
-        image.style.display =
-            "none";
+        preview.style.display = "none";
 
         return;
-
     }
 
+    preview.src =
+        URL.createObjectURL(file);
 
-    image.src = url;
-
-    image.style.display =
-        "block";
-
+    preview.style.display = "block";
 }
-
-
 
 // ========================================
 // ENREGISTRER
 // ========================================
-
 async function saveProduct() {
 
     const id =
@@ -974,54 +969,57 @@ async function saveProduct() {
         ).value;
 
 
-    const product = {
+    const nom =
+        document.getElementById(
+            "productName"
+        ).value.trim();
 
-        nom:
+
+    const description =
+        document.getElementById(
+            "productDescription"
+        ).value.trim();
+
+
+    const prix =
+        Number(
             document.getElementById(
-                "productName"
-            ).value.trim(),
+                "productPrice"
+            ).value
+        );
 
-        description:
+
+    const stock =
+        Number(
             document.getElementById(
-                "productDescription"
-            ).value.trim(),
-
-        prix:
-            Number(
-                document.getElementById(
-                    "productPrice"
-                ).value
-            ),
-
-        image:
-            document.getElementById(
-                "productImage"
-            ).value.trim(),
-
-        stock:
-            Number(
-                document.getElementById(
-                    "productStock"
-                ).value
-            )
-
-    };
+                "productStock"
+            ).value
+        );
 
 
-    if (!product.nom) {
+    const imageInput =
+        document.getElementById(
+            "productImage"
+        );
+
+
+    // =========================
+    // VALIDATION
+    // =========================
+
+    if (!nom) {
 
         alert(
             "Veuillez saisir le nom du produit."
         );
 
         return;
-
     }
 
 
     if (
-        !Number.isFinite(product.prix) ||
-        product.prix < 0
+        !Number.isFinite(prix) ||
+        prix < 0
     ) {
 
         alert(
@@ -1029,13 +1027,12 @@ async function saveProduct() {
         );
 
         return;
-
     }
 
 
     if (
-        !Number.isFinite(product.stock) ||
-        product.stock < 0
+        !Number.isFinite(stock) ||
+        stock < 0
     ) {
 
         alert(
@@ -1043,6 +1040,53 @@ async function saveProduct() {
         );
 
         return;
+    }
+
+
+    // =========================
+    // FORMDATA
+    // =========================
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "nom",
+        nom
+    );
+
+
+    formData.append(
+        "description",
+        description
+    );
+
+
+    formData.append(
+        "prix",
+        prix
+    );
+
+
+    formData.append(
+        "stock",
+        stock
+    );
+
+
+    // Ajouter l'image uniquement
+    // si une image est sélectionnée
+
+    if (
+        imageInput.files &&
+        imageInput.files[0]
+    ) {
+
+        formData.append(
+            "image",
+            imageInput.files[0]
+        );
 
     }
 
@@ -1052,7 +1096,9 @@ async function saveProduct() {
         let response;
 
 
+        // =========================
         // MODIFIER
+        // =========================
 
         if (id) {
 
@@ -1063,13 +1109,8 @@ async function saveProduct() {
 
                         method: "PUT",
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
                         body:
-                            JSON.stringify(product)
+                            formData
 
                     }
                 );
@@ -1077,7 +1118,9 @@ async function saveProduct() {
         }
 
 
+        // =========================
         // AJOUTER
+        // =========================
 
         else {
 
@@ -1088,13 +1131,8 @@ async function saveProduct() {
 
                         method: "POST",
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
                         body:
-                            JSON.stringify(product)
+                            formData
 
                     }
                 );
@@ -1141,7 +1179,6 @@ async function saveProduct() {
     }
 
 }
-
 
 
 // ========================================
