@@ -1,21 +1,17 @@
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
-
-const app = express();
-
-const upload = multer({
-    storage: storage
-});
-
 const multer = require("multer");
 const path = require("path");
+
+const app = express();
 
 // ==========================
 // Configuration upload images
 // ==========================
 
 const storage = multer.diskStorage({
+
     destination: (req, file, cb) => {
         cb(null, "uploads/");
     },
@@ -30,10 +26,31 @@ const storage = multer.diskStorage({
 
         cb(null, nom);
     }
+
 });
 
+const upload = multer({
+    storage: storage
+});
+
+// ==========================
+// Middleware
+// ==========================
+
 app.use(cors());
+
 app.use(express.json());
+
+// Servir HTML, CSS, JS et images
+app.use(express.static(__dirname));
+
+// Permet d'accéder aux images uploadées
+app.use(
+    "/uploads",
+    express.static(
+        path.join(__dirname, "uploads")
+    )
+);
 
 // Servir HTML, CSS, JS et images
 app.use(express.static(__dirname));
