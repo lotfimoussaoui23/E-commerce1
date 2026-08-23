@@ -4,11 +4,41 @@ const cors = require("cors");
 
 const app = express();
 
+const multer = require("multer");
+const path = require("path");
+
+// ==========================
+// Configuration upload images
+// ==========================
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");
+    },
+
+    filename: (req, file, cb) => {
+
+        const extension =
+            path.extname(file.originalname);
+
+        const nom =
+            Date.now() + extension;
+
+        cb(null, nom);
+    }
+});
+
+const upload = multer({
+    storage: storage
+});
+
 app.use(cors());
 app.use(express.json());
 
 // Servir HTML, CSS, JS et images
 app.use(express.static(__dirname));
+
+app.use("/uploads", express.static("uploads"));
 
 // ==========================
 // Connexion à MySQL
@@ -78,54 +108,66 @@ app.get("/api/produits", (req, res) => {
 // ajouter un produit
 //===========================
 
-app.post("/api/produits", (req, res) => {
+app.post(
+    "/api/produits",
+    upload.single("image"),
+    (req, res) => {
 
-    const {
-        nom,
-        description,
-        prix,
-        image,
-        stock
-    } = req.body;
-
-    const sql = `
-        INSERT INTO produits
-        (nom, description, prix, image, stock)
-        VALUES (?, ?, ?, ?, ?)
-    `;
-
-    pool.query(
-        sql,
-        [
+        const {
             nom,
-            description || "",
+            description,
             prix,
-            image || "",
-            stock || 0
-        ],
-        (err, result) => {
+            stock
+        } = req.body;
 
-            if (err) {
+        let image = "";
 
-                console.error(
-                    "Erreur ajout produit :",
-                    err
-                );
-
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.json({
-                success: true,
-                id: result.insertId
-            });
-
+        if (req.file) {
+            image =
+                "/uploads/" + req.file.filename;
         }
-    );
 
-});
+        const sql = `
+            INSERT INTO produits
+            (nom, description, prix, image, stock)
+            VALUES (?, ?, ?, ?, ?)
+        `;
+
+        pool.query(
+            sql,
+            [
+                nom,
+                description || "",
+                prix,
+                image,
+                stock || 0
+            ],
+            (err, result) => {
+
+                if (err) {
+
+                    console.error(
+                        "Erreur ajout produit :",
+                        err
+                    );
+
+                    return res.status(500).json({
+                        error: err.message
+                    });
+                }
+
+                res.json({
+                    success: true,
+                    id: result.insertId,
+                    image: image
+                });
+
+            }
+        );
+
+    }
+);
+
 
 //===========================
 // modifier un produit
