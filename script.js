@@ -19,7 +19,7 @@ async function loadProducts() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/produits"
+            "http://api/produits"
         );
 
         if (!response.ok) {
