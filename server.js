@@ -55,9 +55,6 @@ app.use(cors());
 
 app.use(express.json());
 
-// Servir HTML, CSS, JS et images
-app.use(express.static(__dirname));
-
 // Permet d'accéder aux images uploadées
 app.use(
     "/uploads",
