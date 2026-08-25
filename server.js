@@ -11,27 +11,32 @@ const app = express();
 // ==========================
 
 const storage = multer.diskStorage({
-
-    destination: (req, file, cb) => {
+    destination: function (req, file, cb) {
         cb(null, "uploads/");
     },
 
-    filename: (req, file, cb) => {
+    filename: function (req, file, cb) {
+        const uniqueName =
+            Date.now() +
+            "-" +
+            Math.round(Math.random() * 1E9);
 
-        const extension =
-            path.extname(file.originalname);
-
-        const nom =
-            Date.now() + extension;
-
-        cb(null, nom);
+        cb(
+            null,
+            uniqueName +
+            path.extname(file.originalname)
+        );
     }
-
 });
 
 const upload = multer({
     storage: storage
 });
+
+app.use(
+    "/uploads",
+    express.static("uploads")
+);
 
 // ==========================
 // Middleware
@@ -52,16 +57,6 @@ app.use(
     )
 );
 
-// Servir HTML, CSS, JS et images
-app.use(express.static(__dirname));
-
-// Permet d'accéder aux images uploadées
-app.use(
-    "/uploads",
-    express.static(
-        path.join(__dirname, "uploads")
-    )
-);
 
 // ==========================
 // Connexion à MySQL
