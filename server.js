@@ -55,7 +55,7 @@ app.use(
 app.use(cors());
 
 app.use(express.json());
-
+app.use(express.static(__dirname));
 // Permet d'accéder aux images uploadées
 app.use(
     "/uploads",
