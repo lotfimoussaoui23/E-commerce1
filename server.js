@@ -43,6 +43,8 @@ const upload = multer({
     storage: storage
 });
 
+console.log("Dossier uploads :", uploadDir);
+
 app.use(
     "/uploads",
     express.static("uploads")
@@ -137,6 +139,9 @@ app.post(
     "/api/produits",
     upload.single("image"),
     (req, res) => {
+
+        console.log("Fichier reçu :", req.file);
+        console.log("Données reçues :", req.body);
 
         const {
             nom,
