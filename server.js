@@ -39,7 +39,7 @@ const upload = multer({
     storage: storage
 });
 
-console.log("Dossier uploads :", imageDir);
+
 app.use(
     "/images",
     express.static(imageDir)
@@ -56,7 +56,7 @@ app.use(express.json());
 app.use(express.static(__dirname));
 // Permet d'accéder aux images uploadées
 app.use(
-    "/uploads",
+    "/images",
     express.static(
         path.join(__dirname, "images")
     )
