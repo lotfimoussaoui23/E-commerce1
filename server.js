@@ -10,10 +10,9 @@ const app = express();
 // Configuration upload images
 // ==========================
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "uploads/");
-    },
+destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "uploads"));
+}
 
     filename: function (req, file, cb) {
         const uniqueName =
