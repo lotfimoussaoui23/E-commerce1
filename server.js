@@ -13,10 +13,14 @@ const app = express();
 const storage = multer.diskStorage({
 
     destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "uploads"));
-}
+        cb(
+            null,
+            path.join(__dirname, "uploads")
+        );
+    },
 
     filename: function (req, file, cb) {
+
         const uniqueName =
             Date.now() +
             "-" +
@@ -27,9 +31,10 @@ const storage = multer.diskStorage({
             uniqueName +
             path.extname(file.originalname)
         );
-    }
-});
 
+    }
+
+});
 const upload = multer({
     storage: storage
 });
@@ -956,6 +961,6 @@ app.post("/api/commandes/:id/valider", async (req, res) => {
 //============================================
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
 });
