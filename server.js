@@ -147,7 +147,7 @@ app.post(
 
         if (req.file) {
             image =
-                "/uploads/" + req.file.filename;
+                "/images/" + req.file.filename;
         }
 
         const sql = `
