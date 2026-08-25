@@ -3,6 +3,7 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const app = express();
 const fs = require("fs");
 
 const uploadDir = path.join(__dirname, "uploads");
@@ -10,7 +11,7 @@ const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
-const app = express();
+
 
 // ==========================
 // Configuration upload images
