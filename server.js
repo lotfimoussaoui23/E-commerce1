@@ -6,9 +6,6 @@ const path = require("path");
 const app = express();
 const fs = require("fs");
 
-const fs = require("fs");
-const path = require("path");
-
 const imageDir = path.join(__dirname, "images");
 
 if (!fs.existsSync(imageDir)) {
