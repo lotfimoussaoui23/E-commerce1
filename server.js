@@ -10,7 +10,9 @@ const app = express();
 // Configuration upload images
 // ==========================
 
-destination: function (req, file, cb) {
+const storage = multer.diskStorage({
+
+    destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "uploads"));
 }
 
@@ -954,6 +956,6 @@ app.post("/api/commandes/:id/valider", async (req, res) => {
 //============================================
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
 });
