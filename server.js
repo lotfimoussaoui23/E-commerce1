@@ -6,22 +6,20 @@ const path = require("path");
 const app = express();
 const fs = require("fs");
 
-const uploadDir = path.join(__dirname, "/uploads");
+const fs = require("fs");
+const path = require("path");
 
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+const imageDir = path.join(__dirname, "images");
+
+if (!fs.existsSync(imageDir)) {
+    fs.mkdirSync(imageDir, { recursive: true });
 }
-
-
-// ==========================
-// Configuration upload images
-// ==========================
 
 const storage = multer.diskStorage({
 
     destination: function (req, file, cb) {
-    cb(null, uploadDir);
-},
+        cb(null, imageDir);
+    },
 
     filename: function (req, file, cb) {
 
@@ -32,23 +30,21 @@ const storage = multer.diskStorage({
 
         cb(
             null,
-            uniqueName +
-            path.extname(file.originalname)
+            uniqueName + path.extname(file.originalname)
         );
-
     }
-
 });
+
 const upload = multer({
     storage: storage
 });
 
-console.log("Dossier uploads :", uploadDir);
-
+console.log("Dossier uploads :", imageDir);
 app.use(
-    "/uploads",
-    express.static("uploads")
+    "/images",
+    express.static(imageDir)
 );
+
 
 // ==========================
 // Middleware
@@ -62,7 +58,7 @@ app.use(express.static(__dirname));
 app.use(
     "/uploads",
     express.static(
-        path.join(__dirname, "uploads")
+        path.join(__dirname, "images")
     )
 );
 
@@ -222,7 +218,7 @@ app.put(
         if (req.file) {
 
             const image =
-                "/uploads/" +
+                "/images/" +
                 req.file.filename;
 
 
