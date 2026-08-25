@@ -3,7 +3,13 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
+const uploadDir = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 const app = express();
 
 // ==========================
@@ -13,11 +19,8 @@ const app = express();
 const storage = multer.diskStorage({
 
     destination: function (req, file, cb) {
-        cb(
-            null,
-            path.join(__dirname, "uploads")
-        );
-    },
+    cb(null, uploadDir);
+},
 
     filename: function (req, file, cb) {
 
