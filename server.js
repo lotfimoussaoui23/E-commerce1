@@ -268,7 +268,7 @@ if (req.file) {
 app.put(
     "/api/produits/:id",
     upload.single("image"),
-    (req, res) => {
+    async (req, res) => {
 
         const id = req.params.id;
 
@@ -283,10 +283,14 @@ app.put(
         // Si une nouvelle image est envoyée
         if (req.file) {
 
-            const image =
-                "/images/" +
-                req.file.filename;
+            try {
 
+            console.log("MODIFICATION : upload GitHub en cours...");
+
+            const image =
+                await uploadImageToGitHub(req.file);
+
+            console.log("IMAGE GITHUB :", image);
 
             const sql = `
                 UPDATE produits
@@ -298,7 +302,6 @@ app.put(
                     stock = ?
                 WHERE id = ?
             `;
-
 
             pool.query(
                 sql,
@@ -324,15 +327,27 @@ app.put(
                         });
                     }
 
-
                     res.json({
-                        success: true
+                        success: true,
+                        image: image
                     });
 
                 }
             );
 
+        } catch (error) {
+
+            console.error(
+                "ERREUR GITHUB MODIFICATION :",
+                error.response?.data ||
+                error.message
+            );
+
+            return res.status(500).json({
+                error: "Impossible d'envoyer la nouvelle image sur GitHub"
+            });
         }
+    }
 
         // Aucune nouvelle image
         else {
