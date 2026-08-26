@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const app = express();
 const fs = require("fs");
+const axios = require("axios");
 
 const imageDir = path.join(__dirname, "images");
 
@@ -124,6 +125,56 @@ app.get("/api/produits", (req, res) => {
     });
 });
 
+// uploader les image sur GitHub
+async function uploadImageToGitHub(file) {
+
+    const repo =
+        process.env.GITHUB_REPO;
+
+    const branch =
+        process.env.GITHUB_BRANCH || "main";
+
+    const token =
+        process.env.GITHUB_TOKEN;
+
+    const filePath =
+        `images/${file.filename}`;
+
+    const fileContent =
+        fs.readFileSync(file.path);
+
+    const base64Content =
+        fileContent.toString("base64");
+
+    const url =
+        `https://api.github.com/repos/${repo}/contents/${filePath}`;
+
+    const response =
+        await axios.put(
+            url,
+            {
+                message:
+                    `Ajout image ${file.filename}`,
+
+                content:
+                    base64Content,
+
+                branch:
+                    branch
+            },
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`,
+                    Accept:
+                        "application/vnd.github+json"
+                }
+            }
+        );
+
+    return response.data.content.download_url;
+}
+
 //===========================
 // ajouter un produit
 //===========================
@@ -131,7 +182,7 @@ app.get("/api/produits", (req, res) => {
 app.post(
     "/api/produits",
     upload.single("image"),
-    (req, res) => {
+    async (req, res) => {
 
         console.log("Fichier reçu :", req.file);
         console.log("Données reçues :", req.body);
@@ -145,10 +196,25 @@ app.post(
 
         let image = "";
 
-        if (req.file) {
-            image =
-                "/images/" + req.file.filename;
-        }
+if (req.file) {
+
+    try {
+
+        image =
+            await uploadImageToGitHub(req.file);
+
+    } catch (error) {
+
+        console.error(
+            "Erreur upload GitHub :",
+            error.response?.data || error.message
+        );
+
+        return res.status(500).json({
+            error: "Erreur upload image GitHub"
+        });
+    }
+}
 
         const sql = `
             INSERT INTO produits
