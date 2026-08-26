@@ -205,10 +205,11 @@ if (req.file) {
 
     } catch (error) {
 
-        console.error(
-            "Erreur upload GitHub :",
-            error.response?.data || error.message
-        );
+        console.error("========== ERREUR GITHUB ==========");
+        console.error("Message :", error.message);
+        console.error("Status :", error.response?.status);
+        console.error("Data :", error.response?.data);
+        console.error("===================================");
 
         return res.status(500).json({
             error: "Erreur upload image GitHub"
