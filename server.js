@@ -197,11 +197,13 @@ app.post(
         let image = "";
 
 if (req.file) {
+    console.log("UPLOAD GITHUB EN COURS...");
 
     try {
 
         image =
             await uploadImageToGitHub(req.file);
+            console.log("IMAGE GITHUB :", image);
 
     } catch (error) {
 
