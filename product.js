@@ -99,7 +99,7 @@ function displayProduct(product) {
 <div class="quantity-container">
 
     <span class="quantity-label">
-        Quantité :
+        
     </span>
 
     <div class="quantity-selector">
