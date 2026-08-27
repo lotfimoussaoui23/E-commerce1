@@ -96,7 +96,18 @@ function displayProduct(product) {
 
                 <!-- QUANTITÉ -->
 
-<div class="quantity-selector">
+<div class="quantity-container">
+
+    <span class="quantity-label">
+        Quantité :
+    </span>
+
+    <div class="quantity-selector">
+
+
+    </div>
+
+</div>
 
     <button type="button" onclick="changeQuantity(-1)">
         −
