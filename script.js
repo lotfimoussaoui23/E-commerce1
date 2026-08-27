@@ -166,7 +166,7 @@ function addToCart(id, quantity = 1) {
 
         cart.push({
             id: Number(id),
-            quantity: 1
+            quantity: quantity
         });
 
     }
