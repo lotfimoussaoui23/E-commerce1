@@ -120,7 +120,9 @@ function displayProduct(product) {
 
 </button>
 
-                <div class="productDetailPrice">
+                <div class="productDetailPrice"
+                id="productTotalPrice"
+                data-price="${product.prix}">
 
                     ${Number(product.prix).toLocaleString()} DA
 
@@ -183,7 +185,29 @@ function displayProduct(product) {
     });
 
 }
+//==================
+//update total price
+//==================
+function updateProductPrice() {
 
+    const priceElement =
+        document.getElementById("productTotalPrice");
+
+    if (!priceElement) return;
+
+    const unitPrice =
+        Number(priceElement.dataset.price);
+
+    const totalPrice =
+        unitPrice * selectedQuantity;
+
+    priceElement.textContent =
+        totalPrice.toLocaleString("fr-FR") + " DA";
+}
+
+//==================
+//change quantity
+//==================
 function changeQuantity(change) {
 
     selectedQuantity += change;
@@ -205,6 +229,7 @@ function changeQuantity(change) {
     if (quantityElement) {
         quantityElement.textContent =
             selectedQuantity;
+        updateProductPrice();
     }
 }
 
