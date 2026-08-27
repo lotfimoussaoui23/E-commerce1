@@ -151,7 +151,7 @@ function closeProductDetails() {
 // Ajouter au panier
 // -------------------------
 
-function addToCart(id) {
+function addToCart(id, quantity = 1) {
    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const existing = cart.find(
@@ -160,7 +160,7 @@ function addToCart(id) {
 
     if (existing) {
 
-        existing.quantity += 1;
+        existing.quantity += quantity;
 
     } else {
 
