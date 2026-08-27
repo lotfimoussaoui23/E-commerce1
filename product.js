@@ -5,6 +5,7 @@ const params = new URLSearchParams(
 const productId = params.get("id");
 
 let selectedQuantity = 1;
+let currentStock = 0;
 
 async function loadProduct() {
 
@@ -42,6 +43,9 @@ async function loadProduct() {
 
 
 function displayProduct(product) {
+
+    selectedQuantity = 1;
+    currentStock = Number(product.stock) || 0;
 
     document.getElementById("productPage").innerHTML = `
 
