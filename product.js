@@ -4,6 +4,7 @@ const params = new URLSearchParams(
 
 const productId = params.get("id");
 
+let selectedQuantity = 1;
 
 async function loadProduct() {
 
@@ -89,13 +90,36 @@ function displayProduct(product) {
                 </div>
 
 
-                <button
-                    class="productAddButton"
-                    onclick="addProductToCart(${product.id})">
+                <!-- QUANTITÉ -->
 
-                    AJOUTER AU PANIER
+<div class="quantity-selector">
 
-                </button>
+    <button
+        type="button"
+        onclick="changeQuantity(-1, ${product.stock})">
+        −
+    </button>
+
+    <span id="quantity">
+        1
+    </span>
+
+    <button
+        type="button"
+        onclick="changeQuantity(1, ${product.stock})">
+        +
+    </button>
+
+</div>
+
+
+<button
+    class="productAddButton"
+    onclick="addProductToCart(${product.id})">
+
+    AJOUTER AU PANIER
+
+</button>
 
 
                 <div class="productDetailPrice">
@@ -129,7 +153,25 @@ function displayProduct(product) {
         </div>
 
     `;
+    
+function changeQuantity(change, stock) {
 
+    selectedQuantity += change;
+
+    // Minimum 1
+    if (selectedQuantity < 1) {
+        selectedQuantity = 1;
+    }
+
+    // Maximum = stock disponible
+    if (selectedQuantity > stock) {
+        selectedQuantity = stock;
+    }
+
+    document.getElementById("quantity").textContent =
+        selectedQuantity;
+}
+    
     // 🔍 ZOOM DE L'IMAGE
 
     const box = document.querySelector(".productDetailImage");
@@ -168,7 +210,7 @@ function addProductToCart(id) {
        déjà présente dans script.js
     */
 
-    addToCart(id);
+    addToCart(id, selectedQuantity);
 
 }
 
