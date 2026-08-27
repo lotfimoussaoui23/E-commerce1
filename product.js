@@ -98,24 +98,17 @@ function displayProduct(product) {
 
 <div class="quantity-selector">
 
-    <button
-        type="button"
-        onclick="changeQuantity(-1, ${product.stock})">
+    <button type="button" onclick="changeQuantity(-1)">
         −
     </button>
 
-    <span id="quantity">
-        1
-    </span>
+    <span id="quantity">1</span>
 
-    <button
-        type="button"
-        onclick="changeQuantity(1, ${product.stock})">
+    <button type="button" onclick="changeQuantity(1)">
         +
     </button>
 
 </div>
-
 
 <button
     class="productAddButton"
@@ -124,7 +117,6 @@ function displayProduct(product) {
     AJOUTER AU PANIER
 
 </button>
-
 
                 <div class="productDetailPrice">
 
@@ -158,23 +150,7 @@ function displayProduct(product) {
 
     `;
     
-function changeQuantity(change, stock) {
 
-    selectedQuantity += change;
-
-    // Minimum 1
-    if (selectedQuantity < 1) {
-        selectedQuantity = 1;
-    }
-
-    // Maximum = stock disponible
-    if (selectedQuantity > stock) {
-        selectedQuantity = stock;
-    }
-
-    document.getElementById("quantity").textContent =
-        selectedQuantity;
-}
     
     // 🔍 ZOOM DE L'IMAGE
 
@@ -206,6 +182,29 @@ function changeQuantity(change, stock) {
 
 }
 
+function changeQuantity(change) {
+
+    selectedQuantity += change;
+
+    if (selectedQuantity < 1) {
+        selectedQuantity = 1;
+    }
+
+    if (
+        currentStock > 0 &&
+        selectedQuantity > currentStock
+    ) {
+        selectedQuantity = currentStock;
+    }
+
+    const quantityElement =
+        document.getElementById("quantity");
+
+    if (quantityElement) {
+        quantityElement.textContent =
+            selectedQuantity;
+    }
+}
 
 function addProductToCart(id) {
 
@@ -213,6 +212,12 @@ function addProductToCart(id) {
        On utilise la fonction addToCart()
        déjà présente dans script.js
     */
+    if (currentStock <= 0) {
+
+        alert("Ce produit est en rupture de stock.");
+
+        return;
+    }
 
     addToCart(id, selectedQuantity);
 
