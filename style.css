@@ -81,7 +81,7 @@ main {
 }
 
 .price {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     margin: 10px 0;
     white-space: nowrap;
@@ -117,7 +117,7 @@ main {
 .quantity-small {
     margin: 0;
     flex-shrink: 0;
-    transform: scale(0.6);
+    transform: scale(0.7);
     transform-origin: right center;
 }
 
