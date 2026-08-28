@@ -78,6 +78,7 @@ main {
 
 .product h3 {
     margin: 10px 0;
+    margin-bottom: 4px;
 }
 
 .price {
@@ -110,7 +111,8 @@ main {
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    margin: 7px 0;
+    margin-bottom: 10px;
+    margin-top: 0;
     flex-wrap: nowrap;
 }
 
