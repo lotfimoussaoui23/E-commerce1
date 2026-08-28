@@ -182,8 +182,9 @@ function changeProductQuantity(
     }
 
 
-    // Réafficher seulement les cartes
-    displayProducts();
+    // Réafficher la quantité
+    document.getElementById(`quantity-${id}`).textContent =
+        productQuantities[id];
 
 }
 
