@@ -11,6 +11,8 @@ let products = [];
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+const productQuantities = {};
+
 // -------------------------
 // charger les produits
 // -------------------------
@@ -48,18 +50,28 @@ async function loadProducts() {
 
 function displayProducts(list = products) {
 
-    const container = document.getElementById("products");
+    const container =
+        document.getElementById("products");
 
     container.innerHTML = "";
 
     list.forEach(product => {
 
-        const div = document.createElement("div");
+        // Quantité par défaut
+        if (!productQuantities[product.id]) {
+            productQuantities[product.id] = 1;
+        }
+
+        const div =
+            document.createElement("div");
 
         div.className = "product";
 
         div.innerHTML = `
-            <img src="${product.image}" alt="${product.nom}">
+
+            <img
+                src="${product.image}"
+                alt="${product.nom}">
 
             <h3>${product.nom}</h3>
 
@@ -67,22 +79,113 @@ function displayProducts(list = products) {
                 ${Number(product.prix).toLocaleString()} DA
             </div>
 
-            <button class="add"
-                onclick="event.stopPropagation();
-                         addToCart(${product.id})">
+
+            <!-- QUANTITÉ -->
+
+            <div
+                class="quantity-selector"
+                onclick="event.stopPropagation()">
+
+                <button
+                    type="button"
+                    onclick="
+                        event.stopPropagation();
+                        changeProductQuantity(
+                            ${product.id},
+                            -1,
+                            ${product.stock}
+                        )
+                    "
+                    ${productQuantities[product.id] <= 1 ? "disabled" : ""}>
+                    −
+                </button>
+
+
+                <span id="quantity-${product.id}">
+                    ${productQuantities[product.id]}
+                </span>
+
+
+                <button
+                    type="button"
+                    onclick="
+                        event.stopPropagation();
+                        changeProductQuantity(
+                            ${product.id},
+                            1,
+                            ${product.stock}
+                        )
+                    "
+                    ${productQuantities[product.id] >= product.stock ? "disabled" : ""}>
+                    +
+                </button>
+
+            </div>
+
+
+            <button
+                class="add"
+                onclick="
+                    event.stopPropagation();
+                    addToCart(
+                        ${product.id},
+                        productQuantities[${product.id}] || 1
+                    )
+                ">
                 Ajouter au panier
             </button>
+
         `;
 
+
         div.addEventListener("click", () => {
+
             window.location.href =
-            `product.html?id=${product.id}`;
+                `product.html?id=${product.id}`;
+
         });
 
+
         container.appendChild(div);
-    }); 
-      
-                
+
+    });
+
+}
+
+//chager la quantité sur index.html
+//=================================
+function changeProductQuantity(
+    id,
+    change,
+    stock
+) {
+
+    if (!productQuantities[id]) {
+        productQuantities[id] = 1;
+    }
+
+    productQuantities[id] += change;
+
+
+    // Minimum 1
+    if (productQuantities[id] < 1) {
+
+        productQuantities[id] = 1;
+
+    }
+
+
+    // Maximum = stock disponible
+    if (productQuantities[id] > stock) {
+
+        productQuantities[id] = stock;
+
+    }
+
+
+    // Réafficher seulement les cartes
+    displayProducts();
+
 }
 
 // afficher produit
