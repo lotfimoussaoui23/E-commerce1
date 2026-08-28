@@ -151,6 +151,7 @@ function displayProducts(list = products) {
 
 }
 
+//=================================
 //chager la quantité sur index.html
 //=================================
 function changeProductQuantity(
@@ -165,26 +166,49 @@ function changeProductQuantity(
 
     productQuantities[id] += change;
 
-
-    // Minimum 1
+    // Minimum = 1
     if (productQuantities[id] < 1) {
-
         productQuantities[id] = 1;
-
     }
-
 
     // Maximum = stock disponible
     if (productQuantities[id] > stock) {
-
         productQuantities[id] = stock;
+    }
+
+
+    // Mettre à jour uniquement le nombre
+    const quantityElement =
+        document.getElementById(`quantity-${id}`);
+
+    if (quantityElement) {
+
+        quantityElement.textContent =
+            productQuantities[id];
 
     }
 
 
-    // Réafficher la quantité
-    document.getElementById(`quantity-${id}`).textContent =
-        productQuantities[id];
+    // Mettre à jour uniquement les boutons
+    const productCard =
+        quantityElement.closest(".product");
+
+    const buttons =
+        productCard.querySelectorAll(
+            ".quantity-selector button"
+        );
+
+    if (buttons.length >= 2) {
+
+        // Bouton -
+        buttons[0].disabled =
+            productQuantities[id] <= 1;
+
+        // Bouton +
+        buttons[1].disabled =
+            productQuantities[id] >= stock;
+
+    }
 
 }
 
