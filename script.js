@@ -75,52 +75,51 @@ function displayProducts(list = products) {
 
             <h3>${product.nom}</h3>
 
-            <div class="price">
-                ${Number(product.prix).toLocaleString()} DA
-            </div>
+<div class="price-quantity-row">
 
+    <div class="price">
+        ${Number(product.prix).toLocaleString()} DA
+    </div>
 
-            <!-- QUANTITÉ -->
+    <div
+        class="quantity-selector quantity-small"
+        onclick="event.stopPropagation()">
 
-            <div
-                class="quantity-selector"
-                onclick="event.stopPropagation()">
+        <button
+            type="button"
+            onclick="
+                event.stopPropagation();
+                changeProductQuantity(
+                    ${product.id},
+                    -1,
+                    ${product.stock}
+                )
+            "
+            ${productQuantities[product.id] <= 1 ? "disabled" : ""}>
+            −
+        </button>
 
-                <button
-                    type="button"
-                    onclick="
-                        event.stopPropagation();
-                        changeProductQuantity(
-                            ${product.id},
-                            -1,
-                            ${product.stock}
-                        )
-                    "
-                    ${productQuantities[product.id] <= 1 ? "disabled" : ""}>
-                    −
-                </button>
+        <span id="quantity-${product.id}">
+            ${productQuantities[product.id]}
+        </span>
 
+        <button
+            type="button"
+            onclick="
+                event.stopPropagation();
+                changeProductQuantity(
+                    ${product.id},
+                    1,
+                    ${product.stock}
+                )
+            "
+            ${productQuantities[product.id] >= product.stock ? "disabled" : ""}>
+            +
+        </button>
 
-                <span id="quantity-${product.id}">
-                    ${productQuantities[product.id]}
-                </span>
+    </div>
 
-
-                <button
-                    type="button"
-                    onclick="
-                        event.stopPropagation();
-                        changeProductQuantity(
-                            ${product.id},
-                            1,
-                            ${product.stock}
-                        )
-                    "
-                    ${productQuantities[product.id] >= product.stock ? "disabled" : ""}>
-                    +
-                </button>
-
-            </div>
+</div>
 
 
             <button
